@@ -1,7 +1,8 @@
-import { intro, outro, select, text, log } from "@clack/prompts";
+import { intro, outro, select, text, log, spinner } from "@clack/prompts";
 import { Config } from "./Config";
+import { exit } from "process";
 
-const main = async () => {
+export const main = async () => {
     intro("Welcome to My Model Context");
 
     const client = await select({
@@ -19,6 +20,7 @@ const main = async () => {
             { value: "add", label: "Add" },
             { value: "list", label: "List" },
             { value: "remove", label: "Remove" },
+            { value: "restart", label: "Restart" },
         ],
     });
 
@@ -52,11 +54,25 @@ const main = async () => {
             config.removeServer(server as string);
             log.success(`Successfully removed ${server as string} from the config`);
             break;
+        case "restart":
+            const loading = spinner();
+            loading.start("Restarting");
+            switch (client) {
+                case "claude":
+                    Bun.spawn(["killall", "Claude"]);
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    Bun.spawn(["open", "-a", "Claude"]);
+                    break;
+                default:
+                    throw new Error("Unsupported MCP client");
+            }
+            loading.stop("Success");
+            break;
     }
 
     config.save();
 
     outro("Thank you for using My Model Context");
-};
 
-main();
+    exit(0);
+};
