@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-const serverSchema = z.object({
+export const serverSchema = z.object({
     command: z.string(),
     args: z.array(z.string()),
-    env: z.record(z.string(), z.string()),
+    env: z.record(z.string(), z.string()).optional(),
 });
 
 export type ServerType = z.infer<typeof serverSchema>;
