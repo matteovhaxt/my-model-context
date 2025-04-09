@@ -7,10 +7,11 @@ export const load = async () => {
         options: [
             { value: "claude", label: "Claude Desktop" },
             { value: "cursor", label: "Cursor" },
+            { value: "windsurf", label: "Windsurf" },
         ],
     });
 
-    const config = new Config(client as string, client as string);
+    const config = new Config(client as 'claude' | 'cursor' | 'windsurf');
 
     return config;
 }

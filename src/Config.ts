@@ -5,16 +5,19 @@ import { homedir } from "os";
 export class Config {
     private config!: ConfigType;
     public path: string;
-    public client: string;
+    public client: 'claude' | 'cursor' | 'windsurf';
 
-    constructor(name: string, client: string) {
+    constructor(client: 'claude' | 'cursor' | 'windsurf') {
         this.client = client;
-        switch (name) {
+        switch (client) {
             case 'claude':
                 this.path = join(homedir(), 'Library', 'Application Support', 'Claude', 'claude_desktop_config.json');
                 break;
             case 'cursor':
                 this.path = join(homedir(), '.cursor', 'mcp.json');
+                break;
+            case 'windsurf':
+                this.path = join(homedir(), '.codeium', 'windsurf', 'mcp_config.json');
                 break;
             default:
                 throw new Error('Unsupported MCP client')
