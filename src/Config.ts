@@ -4,9 +4,11 @@ import { homedir } from "os";
 
 export class Config {
     private config!: ConfigType;
-    private path: string;
+    public path: string;
+    public client: string;
 
-    constructor(name: string) {
+    constructor(name: string, client: string) {
+        this.client = client;
         switch (name) {
             case 'claude':
                 this.path = join(homedir(), 'Library', 'Application Support', 'Claude', 'claude_desktop_config.json');
