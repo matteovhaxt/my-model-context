@@ -11,6 +11,9 @@ export class Config {
             case 'claude':
                 this.path = join(homedir(), 'Library', 'Application Support', 'Claude', 'claude_desktop_config.json');
                 break;
+            case 'cursor':
+                this.path = join(homedir(), '.cursor', 'mcp.json');
+                break;
             default:
                 throw new Error('Unsupported MCP client')
         }
