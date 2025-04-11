@@ -1,15 +1,28 @@
-# my-model-context
+# 🛠️ my-model-context
 
-To install dependencies:
+> Easily manage all of your local MCP configuration files
+
+## ✨ Features
+
+- 💾 Stop messing around in JSON files
+- 🗄️ Manage all config files in one place
+
+## 🔮 Coming Soon
+
+- 👥 Save and swap between different profiles
+- 🚩 Command line flags
+- 👀 Debugging inspector
+
+## 🚀 Get Started
 
 ```bash
-bun install
+npx my-model-context # this will open the interactive mode
 ```
 
-To run:
+## 📋 Usage
 
-```bash
-bun run index.ts
-```
+After starting the interactive mode, follow the on-screen prompts to manage your configuration files.
 
-This project was created using `bun init` in bun v1.2.3. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+## 📄 License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
