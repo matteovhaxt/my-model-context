@@ -1,6 +1,6 @@
 {
     "name": "my-model-context",
-    "version": "0.0.1-beta",
+    "version": "0.0.2-beta",
     "description": "Smooth management of local MCP configs",
     "main": "dist/index.js",
     "module": "index.ts",
