@@ -1,8 +1,21 @@
 {
     "name": "my-model-context",
+    "version": "0.0.1-beta",
+    "description": "Smooth management of local MCP configs",
+    "main": "dist/index.js",
     "module": "index.ts",
     "type": "module",
-    "private": true,
+    "private": false,
+    "bin": {
+        "my-model-context": "./dist/index.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "prepare": "husky",
+        "build": "bun build ./index.ts --outdir ./dist --target node"
+    },
     "dependencies": {
         "@clack/prompts": "^0.10.0",
         "zod": "^3.24.2"
@@ -16,10 +29,10 @@
     "peerDependencies": {
         "typescript": "^5"
     },
-    "scripts": {
-        "prepare": "husky"
-    },
     "lint-staged": {
         "**/*": "prettier --write --ignore-unknown"
+    },
+    "engines": {
+        "bun": ">=1.0.0"
     }
 }
