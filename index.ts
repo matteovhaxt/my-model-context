@@ -1,3 +1,5 @@
-import { main } from "./src/main";
+#!/usr/bin/env node
 
-main();
+import { main } from './src/main'
+
+main()

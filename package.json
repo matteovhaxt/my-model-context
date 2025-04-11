@@ -14,7 +14,11 @@
     ],
     "scripts": {
         "prepare": "husky",
-        "build": "bun build ./index.ts --outdir ./dist --target node"
+        "build": "bun build ./index.ts --outdir ./dist --target node --format esm",
+        "start": "node dist/index.js",
+        "dev": "bun run index.ts",
+        "format": "prettier --write .",
+        "postbuild": "chmod +x dist/index.js"
     },
     "dependencies": {
         "@clack/prompts": "^0.10.0",
