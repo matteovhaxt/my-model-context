@@ -59,14 +59,14 @@ export class Config {
     }
 
     public addServer(name: string, server: ServerType) {
-        this.config.mcpServers[name] = server
+        this.config[name] = server
     }
 
     public listServers() {
-        return this.config.mcpServers
+        return this.config
     }
 
     public removeServer(name: string) {
-        delete this.config.mcpServers[name]
+        delete this.config[name]
     }
 }

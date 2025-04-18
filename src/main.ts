@@ -1,48 +1,53 @@
-import { intro, outro, select } from "@clack/prompts";
-import { exit } from "process";
-import { load, add, list, remove, restart } from "./cli"
+import { intro, log, outro, select } from '@clack/prompts'
+import { exit } from 'process'
+import { System } from './System'
 
 export const main = async () => {
-    intro("Welcome to My Model Context");
+    intro('Welcome to My Model Context')
 
-    const config = await load();
-    
-    let shouldExit = false;
+    const system = await System.load()
 
-    while (!shouldExit) {
-        const action = await select({
-            message: "What would you like to do?",
-            options: [
-                { value: "add", label: "Add" },
-                { value: "list", label: "List" },
-                { value: "remove", label: "Remove" },
-                { value: "restart", label: "Restart" },
-                { value: "exit", label: "Exit" },
-            ],
-        });
+    // console.log(JSON.stringify(system, null, 2));
 
-        switch (action) {
-            case "add":
-                await add(config);
-                break;
-            case "list":
-                await list(config);
-                break;
-            case "remove":
-                await remove(config);
-                break;
-            case "restart":
-                await restart(config.client);
-                break;
-            case "exit":
-                shouldExit = true;
-                break;
-        }
+    const action = await select({
+        message: 'What would you like to do?',
+        options: [
+            { value: 'add', label: 'Add' },
+            { value: 'list', label: 'List' },
+            { value: 'remove', label: 'Remove' },
+        ],
+    })
 
-        await config.save();
+    switch (action) {
+        case 'add':
+            system.addClient({
+                name: 'test',
+                config: {
+                    test: {
+                        command: 'test',
+                        args: ['test'],
+                    },
+                },
+            })
+            break
+        case 'list':
+            log.info(system.clients.map((p) => p.name).join('\n'))
+            break
+        case 'remove':
+            const client = await select({
+                message: 'Select a client to remove',
+                options: system.clients.map((p) => ({
+                    value: p.name,
+                    label: p.name,
+                })),
+            })
+            system.removeClient(client as string)
+            break
     }
 
-    outro("Thank you for using My Model Context");
+    await system.save()
 
-    exit(0);
-};
+    outro('Thank you for using My Model Context')
+
+    exit(0)
+}
