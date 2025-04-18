@@ -16,17 +16,15 @@ export type ConfigType = z.infer<typeof configSchema>
 export const clientSchema = z.object({
     name: z.string(),
     config: configSchema,
+    path: z.string(),
+    jsonKey: z.string(),
 })
 
 export type ClientType = z.infer<typeof clientSchema>
 
-export const profileSchema = clientSchema
-
-export type ProfileType = z.infer<typeof profileSchema>
-
 export const systemSchema = z.object({
-    clients: z.array(clientSchema),
-    profiles: z.array(profileSchema),
+    clients: z.record(z.string(), clientSchema),
+    profiles: z.record(z.string(), configSchema),
 })
 
 export type SystemType = z.infer<typeof systemSchema>

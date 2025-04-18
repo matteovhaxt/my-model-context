@@ -1,61 +1,12 @@
-import { configSchema, type ConfigType, type ServerType } from './types'
-import { join } from 'path'
-import { homedir } from 'os'
-import { readFile, writeFile } from 'fs/promises'
+import { ConfigType, ServerType } from './types'
 
 export class Config {
-    private config!: ConfigType
-    public path: string
-    public client: 'claude' | 'cursor' | 'windsurf'
+    public name: string
+    public config: ConfigType
 
-    constructor(client: 'claude' | 'cursor' | 'windsurf') {
-        this.client = client
-        switch (client) {
-            case 'claude':
-                this.path = join(
-                    homedir(),
-                    'Library',
-                    'Application Support',
-                    'Claude',
-                    'claude_desktop_config.json'
-                )
-                break
-            case 'cursor':
-                this.path = join(homedir(), '.cursor', 'mcp.json')
-                break
-            case 'windsurf':
-                this.path = join(
-                    homedir(),
-                    '.codeium',
-                    'windsurf',
-                    'mcp_config.json'
-                )
-                break
-            default:
-                throw new Error('Unsupported MCP client')
-        }
-        this.load()
-    }
-
-    private async load() {
-        try {
-            const file = await readFile(this.path, 'utf-8')
-            const json = JSON.parse(file)
-            const config = configSchema.parse(json)
-            this.config = config
-        } catch (error) {
-            console.error('Error loading config:', error)
-            throw error
-        }
-    }
-
-    public async save() {
-        try {
-            await writeFile(this.path, JSON.stringify(this.config, null, 2))
-        } catch (error) {
-            console.error('Error saving config:', error)
-            throw error
-        }
+    constructor(name: string, config: ConfigType) {
+        this.name = name
+        this.config = config
     }
 
     public addServer(name: string, server: ServerType) {
@@ -63,10 +14,14 @@ export class Config {
     }
 
     public listServers() {
-        return this.config
+        return Object.entries(this.config)
     }
 
     public removeServer(name: string) {
         delete this.config[name]
+    }
+
+    public setConfig(config: ConfigType) {
+        this.config = config
     }
 }

@@ -1,16 +1,16 @@
 import { join } from 'path'
-import { homedir } from 'os'
 import { readFile, writeFile } from 'fs/promises'
 import {
     systemSchema,
-    type SystemType,
     type ClientType,
-    type ProfileType,
+    type ConfigType,
+    type SystemType,
 } from './types'
 import { fileExists } from './utils'
+import { homedir } from 'os'
 
 export class System {
-    private system!: SystemType
+    public system: SystemType
 
     static readonly path = join(homedir(), '.my-model-context.json')
 
@@ -22,10 +22,12 @@ export class System {
         try {
             const exists = await fileExists(System.path)
             if (!exists) {
-                return new System({
-                    clients: [],
-                    profiles: [],
+                const system = new System({
+                    clients: {},
+                    profiles: {},
                 })
+                await system.save()
+                return system
             }
             const file = await readFile(System.path, 'utf-8')
             const json = JSON.parse(file)
@@ -50,27 +52,15 @@ export class System {
         return this.system.clients
     }
 
-    public addClient(client: ClientType) {
-        this.system.clients.push(client)
-    }
-
-    public removeClient(client: string) {
-        const newClients = this.system.clients.filter((c) => c.name !== client)
-        this.system.clients = newClients
+    public set clients(clients: Record<string, ClientType>) {
+        this.system.clients = clients
     }
 
     public get profiles() {
         return this.system.profiles
     }
 
-    public addProfile(profile: ProfileType) {
-        this.system.profiles.push(profile)
-    }
-
-    public removeProfile(profile: string) {
-        const newProfiles = this.system.profiles.filter(
-            (p) => p.name !== profile
-        )
-        this.system.profiles = newProfiles
+    public set profiles(profiles: Record<string, ConfigType>) {
+        this.system.profiles = profiles
     }
 }
