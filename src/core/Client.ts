@@ -1,6 +1,6 @@
-import { configSchema, type ConfigType } from './types'
+import { configSchema, type ConfigType } from '../types'
 import { readFile, writeFile } from 'fs/promises'
-import { fileExists } from './utils'
+import { fileExists } from '../utils'
 import { Config } from './Config'
 
 export class Client extends Config {

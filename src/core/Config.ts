@@ -1,4 +1,4 @@
-import { ConfigType, ServerType } from './types'
+import { ConfigType, ServerType } from '../types'
 
 export class Config {
     public name: string

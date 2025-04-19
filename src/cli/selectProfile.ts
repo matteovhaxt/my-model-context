@@ -1,4 +1,4 @@
-import { System } from '../System'
+import { System } from '../core/System'
 import { select, isCancel, log } from '@clack/prompts'
 
 export const selectProfile = async () => {

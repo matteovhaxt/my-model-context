@@ -5,8 +5,8 @@ import {
     type ClientType,
     type ConfigType,
     type SystemType,
-} from './types'
-import { fileExists } from './utils'
+} from '../types'
+import { fileExists } from '../utils'
 import { homedir } from 'os'
 
 export class System {

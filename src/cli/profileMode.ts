@@ -1,6 +1,6 @@
 import { select, text, log, isCancel } from '@clack/prompts'
-import { System } from '../System'
-import { Config } from '../Config'
+import { System } from '../core/System'
+import { Config } from '../core/Config'
 import { addServer } from './addServer'
 
 export const profileMode = async () => {

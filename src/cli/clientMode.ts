@@ -1,9 +1,9 @@
 import { isCancel, log, select, text } from '@clack/prompts'
 import { defaultClients } from '../utils'
-import { Client } from '../Client'
+import { Client } from '../core/Client'
 import { addServer } from './addServer'
 import { selectProfile } from './selectProfile'
-import { System } from '../System'
+import { System } from '../core/System'
 
 export const clientMode = async () => {
     const available = await defaultClients()
