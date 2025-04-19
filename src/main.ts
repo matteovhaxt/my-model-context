@@ -1,7 +1,7 @@
-import { intro, outro, select } from '@clack/prompts'
+import { intro, isCancel, log, outro, select } from '@clack/prompts'
 import { exit } from 'process'
-import { client } from './cli/client'
-import { profile } from './cli/profile'
+import { clientMode } from './cli/clientMode'
+import { profileMode } from './cli/profileMode'
 
 export const main = async () => {
     intro('Welcome to My Model Context')
@@ -16,10 +16,10 @@ export const main = async () => {
 
     switch (mode) {
         case 'client':
-            await client()
+            await clientMode()
             break
         case 'profile':
-            await profile()
+            await profileMode()
             break
     }
 

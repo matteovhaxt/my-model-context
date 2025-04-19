@@ -1,9 +1,11 @@
-import { log, select, text } from '@clack/prompts'
+import { isCancel, log, select, text } from '@clack/prompts'
 import { defaultClients } from '../utils'
 import { Client } from '../Client'
+import { addServer } from './addServer'
+import { selectProfile } from './selectProfile'
 import { System } from '../System'
 
-export const client = async () => {
+export const clientMode = async () => {
     const available = await defaultClients()
 
     const selected = await select({
@@ -13,7 +15,6 @@ export const client = async () => {
             label: c.label,
         })),
     })
-
     if (typeof selected === 'symbol') {
         throw new Error('Client not found')
     }
@@ -23,8 +24,6 @@ export const client = async () => {
         selected.jsonKey,
         selected.name
     )
-
-    const system = await System.load()
 
     const action = await select({
         message: 'What do you want to do?',
@@ -39,21 +38,18 @@ export const client = async () => {
 
     switch (action) {
         case 'add':
-            const addName = await text({
-                message: 'Enter a name for the server',
-            })
-            const cmd = await text({
-                message: 'Enter the start command',
-            })
-            const args = (cmd as string).split(' ')
-            client.addServer(addName as string, {
-                command: args[0],
-                args: args.slice(1),
-                env: {},
-                settings: {},
-            })
+            const server = await addServer()
+            if (!server) {
+                log.error('Server not found')
+                break
+            }
+            client.addServer(server)
             break
         case 'list':
+            if (client.listServers().length === 0) {
+                log.warn('No servers found')
+                break
+            }
             log.info(
                 client
                     .listServers()
@@ -62,25 +58,12 @@ export const client = async () => {
             )
             break
         case 'use':
-            const profiles = Object.entries(system.profiles)
-            if (profiles.length === 0) {
-                log.warn('No profiles found')
-                break
-            }
-            const profileName = await select({
-                message: 'Select a profile',
-                options: profiles.map(([key]) => ({
-                    value: key,
-                    label: key,
-                })),
-            })
-            const profile = profiles.find(([key]) => key === profileName)
+            const profile = await selectProfile()
             if (!profile) {
                 log.error('Profile not found')
                 break
             }
-            const [_, config] = profile
-            client.setConfig(config)
+            client.setConfig(profile)
             break
         case 'remove':
             const removeName = await select({
@@ -97,4 +80,10 @@ export const client = async () => {
     }
 
     await client.save()
+
+    const system = await System.load()
+
+    system.clients[selected.name] = client
+
+    await system.save()
 }

@@ -9,8 +9,8 @@ export class Config {
         this.config = config
     }
 
-    public addServer(name: string, server: ServerType) {
-        this.config[name] = server
+    public addServer(server: { name: string; config: ServerType }) {
+        this.config[server.name] = server.config
     }
 
     public listServers() {

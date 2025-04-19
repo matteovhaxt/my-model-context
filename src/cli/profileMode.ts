@@ -1,8 +1,9 @@
-import { select, text, log } from '@clack/prompts'
+import { select, text, log, isCancel } from '@clack/prompts'
 import { System } from '../System'
 import { Config } from '../Config'
+import { addServer } from './addServer'
 
-export const profile = async () => {
+export const profileMode = async () => {
     const system = await System.load()
 
     let name: string
@@ -28,8 +29,6 @@ export const profile = async () => {
         }
     }
 
-    console.log(system.profiles)
-
     const profile = Object.entries(system.profiles).find(
         ([key]) => key === name
     )
@@ -53,15 +52,12 @@ export const profile = async () => {
 
     switch (action) {
         case 'add':
-            const addName = (await text({
-                message: 'Enter a name for the server',
-            })) as string
-            config.addServer(addName, {
-                command: '',
-                args: [],
-                env: {},
-                settings: {},
-            })
+            const server = await addServer()
+            if (!server) {
+                log.error('Server not found')
+                break
+            }
+            config.addServer(server)
             break
         case 'list':
             log.info(
@@ -72,14 +68,14 @@ export const profile = async () => {
             )
             break
         case 'remove':
-            const removeName = (await select({
+            const removeName = await select({
                 message: 'Select a server to remove',
                 options: config.listServers().map(([key]) => ({
                     value: key,
                     label: key,
                 })),
-            })) as string
-            config.removeServer(removeName)
+            })
+            config.removeServer(removeName as string)
             break
     }
 
