@@ -5,19 +5,23 @@
 ## ✨ Features
 
 - 💾 Stop messing around in JSON files
-- 🗄️ Manage all config files in one place
+- 🗄️ Manage all config files at once
+- 👥 Swap between saved profiles
 
 ## 🔮 Coming Soon
 
-- 👥 Save and swap between different profiles
+- 📁 Add your own client configs
 - 🚩 Command line flags
 - 👀 Debugging inspector
+- 📜 Implement protocol specification
 
 ## 🚀 Get Started
 
 ```bash
 npx my-model-context # this will open the interactive mode
 ```
+
+## 🎥 Showcase
 
 ## 📋 Usage
 
