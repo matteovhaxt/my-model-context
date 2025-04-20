@@ -6,21 +6,26 @@ import { profileMode } from './cli/profileMode'
 export const main = async () => {
     intro('Welcome to My Model Context')
 
-    const mode = await select({
-        message: 'What do you want to edit?',
-        options: [
-            { value: 'client', label: 'Client' },
-            { value: 'profile', label: 'Profile' },
-        ],
-    })
+    while (true) {
+        const mode = await select({
+            message: 'What do you want to edit?',
+            options: [
+                { value: 'client', label: 'Client' },
+                { value: 'profile', label: 'Profile' },
+            ],
+        })
+        if (isCancel(mode)) {
+            break
+        }
 
-    switch (mode) {
-        case 'client':
-            await clientMode()
-            break
-        case 'profile':
-            await profileMode()
-            break
+        switch (mode) {
+            case 'client':
+                await clientMode()
+                break
+            case 'profile':
+                await profileMode()
+                break
+        }
     }
 
     outro('Thank you for using My Model Context')

@@ -6,78 +6,108 @@ import { addServer } from './addServer'
 export const profileMode = async () => {
     const system = await System.load()
 
-    let name: string
-
-    name = (await select({
-        message: 'Select a profile',
-        options: [
-            ...Object.entries(system.profiles).map(([key]) => ({
-                value: key,
-                label: key,
-            })),
-            { value: 'new', label: 'New profile' },
-        ],
-    })) as string
-
-    if (name === 'new') {
-        name = (await text({
-            message: 'Enter a name for the new profile',
-        })) as string
-        system.profiles = {
-            ...system.profiles,
-            [name]: {},
-        }
-    }
-
-    const profile = Object.entries(system.profiles).find(
-        ([key]) => key === name
-    )
-
-    if (!profile) {
-        throw new Error('Profile not found')
-    }
-
-    const [_, entry] = profile
-
-    const config = new Config(name, entry)
-
-    const action = await select({
-        message: 'What do you want to do?',
-        options: [
-            { value: 'add', label: 'Add a server' },
-            { value: 'list', label: 'List servers' },
-            { value: 'remove', label: 'Remove a server' },
-        ],
-    })
-
-    switch (action) {
-        case 'add':
-            const server = await addServer()
-            if (!server) {
-                log.error('Server not found')
-                break
-            }
-            config.addServer(server)
-            break
-        case 'list':
-            log.info(
-                config
-                    .listServers()
-                    .map(([key]) => key)
-                    .join('\n')
-            )
-            break
-        case 'remove':
-            const removeName = await select({
-                message: 'Select a server to remove',
-                options: config.listServers().map(([key]) => ({
+    while (true) {
+        const name = await select({
+            message: 'Select a profile',
+            options: [
+                ...Object.entries(system.profiles).map(([key]) => ({
                     value: key,
                     label: key,
                 })),
-            })
-            config.removeServer(removeName as string)
-            break
-    }
+                { value: 'new', label: 'New profile' },
+            ],
+        })
 
-    await system.save()
+        if (isCancel(name)) {
+            break
+        }
+
+        let profileName: string = name as string
+
+        if (profileName === 'new') {
+            const newName = await text({
+                message: 'Enter a name for the new profile',
+            })
+            if (isCancel(newName)) {
+                log.error('Cancelled profile creation')
+                continue
+            }
+            profileName = newName as string
+            system.profiles = {
+                ...system.profiles,
+                [profileName]: {},
+            }
+        }
+
+        const profile = Object.entries(system.profiles).find(
+            ([key]) => key === profileName
+        )
+
+        if (!profile) {
+            log.error('Profile not found')
+            break
+        }
+
+        const [_, entry] = profile
+        const config = new Config(profileName, entry)
+
+        while (true) {
+            const action = await select({
+                message: 'What do you want to do?',
+                options: [
+                    { value: 'add', label: 'Add a server' },
+                    { value: 'list', label: 'List servers' },
+                    { value: 'remove', label: 'Remove a server' },
+                ],
+            })
+
+            if (isCancel(action)) {
+                break
+            }
+
+            switch (action) {
+                case 'add':
+                    const server = await addServer()
+                    if (!server) {
+                        log.error('Exited')
+                        break
+                    }
+                    config.addServer(server)
+                    break
+                case 'list':
+                    if (config.listServers().length === 0) {
+                        log.warn('No servers found')
+                        break
+                    }
+                    log.info(
+                        config
+                            .listServers()
+                            .map(([key]) => key)
+                            .join('\n')
+                    )
+                    break
+                case 'remove':
+                    const clients = config.listServers()
+                    if (clients.length === 0) {
+                        log.warn('No servers found')
+                        break
+                    }
+                    const removeName = await select({
+                        message: 'Select a server to remove',
+                        options: clients.map(([key]) => ({
+                            value: key,
+                            label: key,
+                        })),
+                    })
+                    if (isCancel(removeName)) {
+                        log.error('Exited')
+                        break
+                    }
+                    config.removeServer(removeName as string)
+                    break
+            }
+        }
+
+        await system.save()
+    }
 }
