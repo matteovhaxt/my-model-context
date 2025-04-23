@@ -18,10 +18,8 @@
 ## 🚀 Get Started
 
 ```bash
-npx my-model-context # this will open the interactive mode
+npx my-model-context@latest # this will open the interactive mode
 ```
-
-## 🎥 Showcase
 
 ## 📋 Usage
 

@@ -23,16 +23,19 @@ export const defaultClients = async () => {
                 'Claude',
                 'claude_desktop_config.json'
             ),
+            process: 'Claude',
         },
         cursor: {
             label: 'Cursor',
             jsonKey: 'mcpServers',
             path: join(homedir(), '.cursor', 'mcp.json'),
+            process: 'Cursor',
         },
         windsurf: {
             label: 'Windsurf',
             jsonKey: 'mcpServers',
             path: join(homedir(), '.codeium', 'windsurf', 'mcp_config.json'),
+            process: 'Windsurf',
         },
     }
 
@@ -41,10 +44,8 @@ export const defaultClients = async () => {
     for (const [key, client] of Object.entries(clients)) {
         if (await fileExists(client.path)) {
             available.push({
+                ...client,
                 name: key,
-                label: client.label,
-                path: client.path,
-                jsonKey: client.jsonKey,
             })
         }
     }

@@ -18,6 +18,7 @@ export const clientSchema = z.object({
     config: configSchema,
     path: z.string(),
     jsonKey: z.string(),
+    process: z.string(),
 })
 
 export type ClientType = z.infer<typeof clientSchema>

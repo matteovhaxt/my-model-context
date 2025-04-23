@@ -1,9 +1,10 @@
-import { isCancel, log, select, text } from '@clack/prompts'
+import { isCancel, log, select, spinner, text } from '@clack/prompts'
 import { defaultClients } from '../utils'
 import { Client } from '../core/Client'
 import { addServer } from './addServer'
 import { selectProfile } from './selectProfile'
 import { System } from '../core/System'
+import { restartClient } from './restartClient'
 
 export const clientMode = async () => {
     const available = await defaultClients()
@@ -23,7 +24,8 @@ export const clientMode = async () => {
         const client = await Client.load(
             selected.path,
             selected.jsonKey,
-            selected.name
+            selected.name,
+            selected.process
         )
 
         while (true) {
@@ -90,6 +92,7 @@ export const clientMode = async () => {
                     client.removeServer(removeName as string)
                     break
                 case 'restart':
+                    await restartClient(client)
                     break
             }
         }
