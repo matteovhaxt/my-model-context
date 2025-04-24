@@ -21,6 +21,10 @@
 npx my-model-context@latest # this will open the interactive mode
 ```
 
+## 🎥 Showcase
+
+https://github.com/user-attachments/assets/937b7aa3-77ce-4a81-9422-e23e5c8a8b01
+
 ## 📋 Usage
 
 After starting the interactive mode, follow the on-screen prompts to manage your configuration files.
