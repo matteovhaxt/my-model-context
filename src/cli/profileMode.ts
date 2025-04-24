@@ -61,7 +61,6 @@ export const profileMode = async () => {
                     { value: 'delete', label: 'Delete profile' },
                 ],
             })
-
             if (isCancel(action)) {
                 break
             }
@@ -113,11 +112,11 @@ export const profileMode = async () => {
                     break
             }
 
+            await system.save()
+
             if (action === 'delete') {
                 break
             }
-
-            await system.save()
         }
     }
 }
