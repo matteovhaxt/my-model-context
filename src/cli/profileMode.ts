@@ -106,8 +106,8 @@ export const profileMode = async () => {
                     config.removeServer(removeName as string)
                     break
             }
-        }
 
-        await system.save()
+            await system.save()
+        }
     }
 }

@@ -95,14 +95,14 @@ export const clientMode = async () => {
                     await restartClient(client)
                     break
             }
+
+            await client.save()
+
+            const system = await System.load()
+
+            system.clients[selected.name] = client
+
+            await system.save()
         }
-
-        await client.save()
-
-        const system = await System.load()
-
-        system.clients[selected.name] = client
-
-        await system.save()
     }
 }
