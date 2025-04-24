@@ -6,6 +6,11 @@ export const selectProfile = async () => {
 
     const profiles = Object.entries(system.profiles)
 
+    if (profiles.length === 0) {
+        log.warn('No profiles found')
+        return
+    }
+
     const selected = await select({
         message: 'Select a profile',
         options: profiles.map(([key]) => ({

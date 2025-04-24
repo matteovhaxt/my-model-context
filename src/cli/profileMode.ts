@@ -70,7 +70,6 @@ export const profileMode = async () => {
                 case 'add':
                     const server = await addServer()
                     if (!server) {
-                        log.error('Exited')
                         break
                     }
                     config.addServer(server)
@@ -101,7 +100,6 @@ export const profileMode = async () => {
                         })),
                     })
                     if (isCancel(removeName)) {
-                        log.error('Exited')
                         break
                     }
                     config.removeServer(removeName as string)

@@ -48,7 +48,6 @@ export const clientMode = async () => {
                 case 'add':
                     const server = await addServer()
                     if (!server) {
-                        log.error('Exited')
                         break
                     }
                     client.addServer(server)
@@ -68,7 +67,6 @@ export const clientMode = async () => {
                 case 'use':
                     const profile = await selectProfile()
                     if (!profile) {
-                        log.error('Exited')
                         break
                     }
                     client.setConfig(profile)
@@ -87,7 +85,6 @@ export const clientMode = async () => {
                         })),
                     })
                     if (isCancel(removeName)) {
-                        log.error('Exited')
                         break
                     }
                     client.removeServer(removeName as string)
@@ -100,7 +97,6 @@ export const clientMode = async () => {
                         message: 'Enter a name for the new profile',
                     })
                     if (isCancel(profileName)) {
-                        log.error('Exited')
                         break
                     }
                     if (profileName === 'new') {
