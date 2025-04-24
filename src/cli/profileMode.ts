@@ -58,6 +58,7 @@ export const profileMode = async () => {
                     { value: 'add', label: 'Add a server' },
                     { value: 'list', label: 'List servers' },
                     { value: 'remove', label: 'Remove a server' },
+                    { value: 'delete', label: 'Delete profile' },
                 ],
             })
 
@@ -105,6 +106,17 @@ export const profileMode = async () => {
                     }
                     config.removeServer(removeName as string)
                     break
+                case 'delete':
+                    const { [profileName]: _, ...remainingProfiles } =
+                        system.profiles
+                    system.profiles = remainingProfiles
+                    await system.save()
+                    log.success('Deleted profile')
+                    break
+            }
+
+            if (action === 'delete') {
+                break
             }
 
             await system.save()
