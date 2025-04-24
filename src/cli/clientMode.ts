@@ -37,6 +37,7 @@ export const clientMode = async () => {
                     { value: 'remove', label: 'Remove a server' },
                     { value: 'use', label: 'Use a profile' },
                     { value: 'restart', label: 'Restart the client' },
+                    { value: 'save', label: 'Save as profile' },
                 ],
             })
             if (isCancel(action)) {
@@ -93,6 +94,23 @@ export const clientMode = async () => {
                     break
                 case 'restart':
                     await restartClient(client)
+                    break
+                case 'save':
+                    const profileName = await text({
+                        message: 'Enter a name for the new profile',
+                    })
+                    if (isCancel(profileName)) {
+                        log.error('Exited')
+                        break
+                    }
+                    if (profileName === 'new') {
+                        log.error('Invalid profile name')
+                        break
+                    }
+                    const system = await System.load()
+                    system.profiles[profileName as string] = client.config
+                    await system.save()
+                    log.success('Saved profile')
                     break
             }
 
