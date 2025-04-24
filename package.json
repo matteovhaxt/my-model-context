@@ -1,6 +1,6 @@
 {
     "name": "my-model-context",
-    "version": "0.0.5-beta",
+    "version": "0.0.6-beta",
     "description": "Smooth management of local MCP configs",
     "keywords": [
         "mcp",
