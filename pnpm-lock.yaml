@@ -10,6 +10,9 @@ importers:
             '@clack/prompts':
                 specifier: ^0.10.0
                 version: 0.10.1
+            chalk:
+                specifier: ^5.4.1
+                version: 5.4.1
             zod:
                 specifier: ^3.24.2
                 version: 3.24.2
